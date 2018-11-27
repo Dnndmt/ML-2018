@@ -1,6 +1,10 @@
+import numpy as np
+import pandas as pd
+
 def extract_features(functions, func_name, training):
     """ Function to extract summary features from a matrix which are passed in a list 
         named functions. The summary features """
+    data = []
     for c, func in enumerate(functions):
         feature = []
         for num in range(len(training)):
@@ -8,11 +12,13 @@ def extract_features(functions, func_name, training):
             feature.append(func(feature_1, axis=0))
 
         features = pd.DataFrame(np.matrix(feature))
-        training1 = training.drop('feature', axis=1)
-        training2 = training1.merge(features)
-        training2.to_csv('features_{}.csv'.format(func_name[c]), encoding='utf-8', index=True)
+        features.to_csv('features_{}.csv'.format(func_name[c]), encoding='utf-8', index=True)
         
+        data.append(np.matrix(feature))
+    return np.concatenate(data, axis=1)
+ 
+ 
 functions1 = [np.mean, np.min, np.max, np.std, np.var, np.median]
 func_name1 = ['mean', 'min', 'max', 'std', 'var', 'median']
 
-extract_features(functions1, func_name1, training)
+eng_features = extract_features(functions1, func_name1, training)
