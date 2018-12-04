@@ -1,0 +1,18 @@
+mfcc_data = []
+for i in range(len(training['feature'])):
+    mfcc_data.append(training['feature'][i][0])
+
+all_matrix = np.zeros((94824, 99, 13)) #
+for row in range(94824):
+    temp_mat = mfcc_data[row]
+    dim_desired = temp_mat.shape
+    all_matrix[row][0:dim_desired[0]] = temp_mat
+    
+word_list = set(training['word'])
+num_list = [i for i in range(len(word_list))]
+dic = dict(zip(word_list, num_list))
+convert = []
+for word in training['word']:
+    convert.append(dic[word])
+    
+print(all_matrix.shape, pd.Series(convert).shape)
