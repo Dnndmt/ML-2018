@@ -1,8 +1,3 @@
-
-# coding: utf-8
-
-# In[1]:
-
 import os
 import numpy as np
 import pandas as pd
@@ -16,15 +11,9 @@ from keras.layers.recurrent import LSTM
 
 from sklearn.model_selection import train_test_split
 
-
-# In[2]:
-
 # Data
 convert = np.load('num_targets.npy')
 MFCC_matrix = np.load('MFCC_matrix.npy')
-
-
-# In[3]:
 
 np.random.seed(1337)  # for reproducibility
 
@@ -32,7 +21,6 @@ batch_size = 5
 hidden_units = 100
 nb_classes = 35
 
-print('Loading data...')
 # Load and split the data
 yy = pd.Series(convert)
 xx = MFCC_matrix
@@ -75,7 +63,7 @@ model.add(Activation('softmax'))
 # try using different optimizers and different optimizer configs
 # Adam optimizer was tried already
 sgd = SGD(lr=0.1, decay=1e-6, momentum=0.9, nesterov=True)
-model.compile(loss='categorical_crossentropy', optimizer=sgd, metrics=['accuracy'])
+model.compile(loss='categorical_crossentropy', optimizer=sgd, metrics=['categorical_accuracy'])
 
 print("Train...")
 model.fit(X_train, Y_train, batch_size=batch_size, nb_epoch=3, validation_data=(X_test, Y_test)) 
@@ -84,4 +72,3 @@ score, acc = model.evaluate(X_test, Y_test,
                             batch_size=batch_size)
 print('Test score:', score)
 print('Test accuracy:', acc)
-
